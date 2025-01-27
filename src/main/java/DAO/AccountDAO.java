@@ -43,10 +43,10 @@ public class AccountDAO implements IAccountDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            PreparedStatement ps = connection
+            ps = connection
                     .prepareStatement("select * from account where username=?");
             ps.setString(1, username);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.next()) {
                 return new Account(
                         rs.getInt("account_id"),
