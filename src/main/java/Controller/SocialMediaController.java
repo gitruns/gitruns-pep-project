@@ -25,7 +25,7 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
-        app.get("register", this::register);
+        app.post("register", this::register);
 
         return app;
     }
@@ -41,6 +41,11 @@ public class SocialMediaController {
     }
 
     private void register(Context ctx) {
+        if (ctx.body().isEmpty()) {
+            ctx.status(400);
+            return;
+        }
+
         Account account = ctx.bodyAsClass(Account.class);
         if (accountService.register(account)) {
             ctx.status(200);
