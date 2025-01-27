@@ -36,6 +36,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public boolean verify(Account account) {
-        return account.getPassword().equals(dao.getAccountByUsername(account.getUsername()).getPassword());
+        Account a = dao.getAccountByUsername(account.getUsername());
+        return a != null && account.getPassword().equals(a.getPassword());
     }
 }
