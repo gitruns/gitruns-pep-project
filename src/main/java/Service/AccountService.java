@@ -7,6 +7,8 @@ interface IAccountService {
     boolean register(Account account);
 
     Account getAccountByUsername(String username);
+
+    boolean verify(Account account);
 }
 
 public class AccountService implements IAccountService {
@@ -30,5 +32,10 @@ public class AccountService implements IAccountService {
     @Override
     public Account getAccountByUsername(String username) {
         return dao.getAccountByUsername(username);
+    }
+
+    @Override
+    public boolean verify(Account account) {
+        return account.getPassword().equals(dao.getAccountByUsername(account.getUsername()).getPassword());
     }
 }

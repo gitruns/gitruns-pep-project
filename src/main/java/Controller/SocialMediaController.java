@@ -26,6 +26,7 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
         app.post("register", this::register);
+        app.post("login", this::login);
 
         return app;
     }
@@ -52,6 +53,21 @@ public class SocialMediaController {
             ctx.json(accountService.getAccountByUsername(account.getUsername()));
         } else {
             ctx.status(400);
+        }
+    }
+
+    private void login(Context ctx) {
+        if (ctx.body().isEmpty()) {
+            ctx.status(400);
+            return;
+        }
+
+        Account account = ctx.bodyAsClass(Account.class);
+        if (accountService.verify(account)) {
+            ctx.status(200);
+            ctx.json(accountService.getAccountByUsername(account.getUsername()));
+        } else {
+            ctx.status(401);
         }
     }
 }
