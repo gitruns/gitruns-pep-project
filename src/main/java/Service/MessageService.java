@@ -2,7 +2,6 @@ package Service;
 
 import java.util.List;
 
-import DAO.AccountDAO;
 import DAO.MessageDAO;
 import Model.Message;
 
@@ -15,20 +14,20 @@ interface IMessageService {
 
     Message deleteMessageByID(int id);
 
-    Message patchMessageByID(int id, Message message);
+    Message updateMessageByID(int id, Message message);
+
+    List<Message> selectMessageByAccountID(int account_id);
 }
 
 public class MessageService implements IMessageService {
     private MessageDAO dao;
-    private AccountDAO daoa;
 
     public MessageService() {
-        this(new MessageDAO(), new AccountDAO());
+        this(new MessageDAO());
     }
 
-    public MessageService(MessageDAO dao, AccountDAO daoa) {
+    public MessageService(MessageDAO dao) {
         this.dao = dao;
-        this.daoa = daoa;
     }
 
     @Override
@@ -61,13 +60,18 @@ public class MessageService implements IMessageService {
     }
 
     @Override
-    public Message patchMessageByID(int id, Message message) {
+    public Message updateMessageByID(int id, Message message) {
         int msgLength = message.getMessage_text().length();
         if (msgLength < 1 || msgLength > 255)
             return null;
 
-        if (dao.patchMessageByID(id, message))
+        if (dao.updateMessageByID(id, message))
             return dao.selectMessageByID(id);
         return null;
+    }
+
+    @Override
+    public List<Message> selectMessageByAccountID(int account_id) {
+        return dao.selectMessagesPostedByAccountID(account_id);
     }
 }

@@ -21,7 +21,9 @@ interface IMessageDAO {
 
     boolean deleteMessageByID(int id);
 
-    boolean patchMessageByID(int id, Message message);
+    boolean updateMessageByID(int id, Message message);
+
+    List<Message> selectMessagesPostedByAccountID(int account_id);
 }
 
 public class MessageDAO implements IMessageDAO {
@@ -125,7 +127,7 @@ public class MessageDAO implements IMessageDAO {
     }
 
     @Override
-    public boolean patchMessageByID(int id, Message message) {
+    public boolean updateMessageByID(int id, Message message) {
         PreparedStatement ps = null;
         try {
             ps = connection
@@ -144,4 +146,29 @@ public class MessageDAO implements IMessageDAO {
         return false;
     }
 
+    @Override
+    public List<Message> selectMessagesPostedByAccountID(int account_id) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Message> messages = new ArrayList<>();
+        try {
+            ps = connection
+                    .prepareStatement("select * from message where posted_by=?");
+            ps.setInt(1, account_id);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                messages.add(new Message(
+                        rs.getInt("message_id"),
+                        rs.getInt("posted_by"),
+                        rs.getString("message_text"),
+                        rs.getLong("time_posted_epoch")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeQuietly(rs, ps);
+        }
+        return messages;
+    }
 }
