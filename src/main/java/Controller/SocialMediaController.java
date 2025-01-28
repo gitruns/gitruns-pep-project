@@ -31,6 +31,7 @@ public class SocialMediaController {
         app.post("login", this::login);
         app.post("messages", this::messages);
         app.get("messages", this::getMessages);
+        app.get("messages/:id", this::getMessageById);
 
         return app;
     }
@@ -92,5 +93,10 @@ public class SocialMediaController {
 
     private void getMessages(Context ctx) {
         ctx.json(msgService.selectAllMessages());
+    }
+
+    private void getMessageById(Context ctx) {
+        int id = Integer.parseInt(ctx.pathParam("id"));
+        ctx.json(msgService.selectMessageByID(id));
     }
 }

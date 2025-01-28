@@ -11,11 +11,7 @@ interface IMessageService {
 
     List<Message> selectAllMessages();
 
-    /*
-     * Account getAccountByUsername(String username);
-     * 
-     * boolean verify(Account account);
-     */
+    Message selectMessageByID(int id);
 }
 
 public class MessageService implements IMessageService {
@@ -45,14 +41,8 @@ public class MessageService implements IMessageService {
         return dao.selectAllMessages();
     }
 
-    // @Override
-    // public Account getAccountByUsername(String username) {
-    // return dao.getAccountByUsername(username);
-    // }
-
-    // @Override
-    // public boolean verify(Account account) {
-    // Account a = dao.getAccountByUsername(account.getUsername());
-    // return a != null && account.getPassword().equals(a.getPassword());
-    // }
+    @Override
+    public Message selectMessageByID(int id) {
+        return dao.selectMessageByID(id);
+    }
 }
