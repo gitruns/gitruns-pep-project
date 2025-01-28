@@ -31,7 +31,7 @@ public class SocialMediaController {
         app.post("login", this::login);
         app.post("messages", this::messages);
         app.get("messages", this::getMessages);
-        app.get("messages/:id", this::getMessageById);
+        app.get("messages/{id}", this::getMessageById);
 
         return app;
     }
