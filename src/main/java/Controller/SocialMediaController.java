@@ -30,7 +30,7 @@ public class SocialMediaController {
         app.post("register", this::register);
         app.post("login", this::login);
         app.post("messages", this::messages);
-        app.get("messages", this::messages);
+        app.get("messages", this::getMessages);
 
         return app;
     }
