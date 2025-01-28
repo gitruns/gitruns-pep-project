@@ -14,6 +14,8 @@ interface IMessageService {
     Message selectMessageByID(int id);
 
     Message deleteMessageByID(int id);
+
+    Message patchMessageByID(int id, Message message);
 }
 
 public class MessageService implements IMessageService {
@@ -55,6 +57,13 @@ public class MessageService implements IMessageService {
             return null;
         if (dao.deleteMessageByID(id))
             return msg;
+        return null;
+    }
+
+    @Override
+    public Message patchMessageByID(int id, Message message) {
+        if (dao.patchMessageByID(id, message))
+            return dao.selectMessageByID(id);
         return null;
     }
 }

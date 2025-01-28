@@ -20,6 +20,8 @@ interface IMessageDAO {
     List<Message> selectAllMessages();
 
     boolean deleteMessageByID(int id);
+
+    boolean patchMessageByID(int id, Message message);
 }
 
 public class MessageDAO implements IMessageDAO {
@@ -111,6 +113,26 @@ public class MessageDAO implements IMessageDAO {
             ps = connection
                     .prepareStatement("delete from message where message_id=?");
             ps.setInt(1, id);
+            if (ps.executeUpdate() == 1) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeQuietly(ps);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean patchMessageByID(int id, Message message) {
+        PreparedStatement ps = null;
+        try {
+            ps = connection
+                    .prepareStatement("update message set message_text=? where message_id=?");
+            ps.setString(1, message.getMessage_text());
+            ps.setInt(2, id);
+
             if (ps.executeUpdate() == 1) {
                 return true;
             }
