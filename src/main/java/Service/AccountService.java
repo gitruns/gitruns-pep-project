@@ -25,18 +25,18 @@ public class AccountService implements IAccountService {
     @Override
     public boolean register(Account account) {
         if (account.getUsername().length() > 0 && account.getPassword().length() >= 4)
-            return dao.register(account);
+            return dao.insertAccount(account);
         return false;
     }
 
     @Override
     public Account getAccountByUsername(String username) {
-        return dao.getAccountByUsername(username);
+        return dao.selectAccountByUsername(username);
     }
 
     @Override
     public boolean verify(Account account) {
-        Account a = dao.getAccountByUsername(account.getUsername());
+        Account a = dao.selectAccountByUsername(account.getUsername());
         return a != null && account.getPassword().equals(a.getPassword());
     }
 }

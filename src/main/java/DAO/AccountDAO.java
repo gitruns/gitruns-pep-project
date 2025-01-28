@@ -10,16 +10,16 @@ import java.sql.SQLException;
 import Model.Account;
 
 interface IAccountDAO {
-    boolean register(Account account);
+    boolean insertAccount(Account account);
 
-    Account getAccountByUsername(String username);
+    Account selectAccountByUsername(String username);
 }
 
 public class AccountDAO implements IAccountDAO {
     private Connection connection = ConnectionUtil.getConnection();
 
     @Override
-    public boolean register(Account account) {
+    public boolean insertAccount(Account account) {
         PreparedStatement ps = null;
         try {
             ps = connection
@@ -35,17 +35,19 @@ public class AccountDAO implements IAccountDAO {
         } finally {
             closeQuietly(ps);
         }
+
         return false;
     }
 
     @Override
-    public Account getAccountByUsername(String username) {
+    public Account selectAccountByUsername(String username) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             ps = connection
                     .prepareStatement("select * from account where username=?");
             ps.setString(1, username);
+
             rs = ps.executeQuery();
             if (rs.next()) {
                 return new Account(
@@ -58,6 +60,7 @@ public class AccountDAO implements IAccountDAO {
         } finally {
             closeQuietly(rs, ps);
         }
+
         return null;
     }
 }
