@@ -32,6 +32,7 @@ public class SocialMediaController {
         app.post("messages", this::messages);
         app.get("messages", this::getMessages);
         app.get("messages/{id}", this::getMessageById);
+        // app.delete("messages/{id}", this::deleteMessageById);
 
         return app;
     }
@@ -97,6 +98,19 @@ public class SocialMediaController {
 
     private void getMessageById(Context ctx) {
         int id = Integer.parseInt(ctx.pathParam("id"));
-        ctx.json(msgService.selectMessageByID(id));
+        Message msg = msgService.selectMessageByID(id);
+        if (msg == null) {
+            // Return 200 with an empty or null JSON instead of causing a 500
+            ctx.status(200).json(null);
+        } else {
+            ctx.json(msg);
+        }
     }
+
+    /*
+     * private void deleteMessageById(Context ctx) {
+     * int id = Integer.parseInt(ctx.pathParam("id"));
+     * ctx.json(msgService.deleteMessageByID(id));
+     * }
+     */
 }
