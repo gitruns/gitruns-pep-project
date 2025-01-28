@@ -50,46 +50,45 @@ public class SocialMediaController {
 
     private void register(Context ctx) {
         if (ctx.body().isEmpty()) {
-            ctx.status(400);
+            ctx.status(400).json("");
             return;
         }
 
         Account account = ctx.bodyAsClass(Account.class);
         if (accountService.register(account)) {
-            ctx.status(200);
+            ctx.status(200).json("");
             ctx.json(accountService.getAccountByUsername(account.getUsername()));
         } else {
-            ctx.status(400);
+            ctx.status(400).json("");
         }
     }
 
     private void login(Context ctx) {
         if (ctx.body().isEmpty()) {
-            ctx.status(400);
+            ctx.status(400).json("");
             return;
         }
 
         Account account = ctx.bodyAsClass(Account.class);
         if (accountService.verify(account)) {
-            ctx.status(200);
+            ctx.status(200).json("");
             ctx.json(accountService.getAccountByUsername(account.getUsername()));
         } else {
-            ctx.status(401);
+            ctx.status(401).json("");
         }
     }
 
     private void messages(Context ctx) {
         if (ctx.body().isEmpty()) {
-            ctx.status(400);
+            ctx.status(400).json("");
             return;
         }
 
         Message msg = msgService.insertMessage(ctx.bodyAsClass(Message.class));
         if (msg != null) {
-            ctx.status(200);
-            ctx.json(msg);
+            ctx.status(200).json(msg);
         } else {
-            ctx.status(400);
+            ctx.status(400).json("");
         }
     }
 
@@ -121,7 +120,7 @@ public class SocialMediaController {
         int id = Integer.parseInt(ctx.pathParam("id"));
         Message msg = msgService.patchMessageByID(id, ctx.bodyAsClass(Message.class));
         if (msg == null) {
-            ctx.status(200).json("");
+            ctx.status(400).json("");
         } else {
             ctx.json(msg);
         }
