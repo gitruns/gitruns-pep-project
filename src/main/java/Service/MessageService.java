@@ -1,11 +1,15 @@
 package Service;
 
+import java.util.List;
+
 import DAO.AccountDAO;
 import DAO.MessageDAO;
 import Model.Message;
 
 interface IMessageService {
     Message insertMessage(Message message);
+
+    List<Message> selectAllMessages();
 
     /*
      * Account getAccountByUsername(String username);
@@ -34,6 +38,11 @@ public class MessageService implements IMessageService {
             return null;
 
         return dao.insertMessage(message);
+    }
+
+    @Override
+    public List<Message> selectAllMessages() {
+        return dao.selectAllMessages();
     }
 
     // @Override

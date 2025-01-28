@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import Model.Message;
 
@@ -14,6 +16,8 @@ interface IMessageDAO {
     Message insertMessage(Message message);
 
     Message selectMessageByID(int message_id);
+
+    List<Message> selectAllMessages();
 }
 
 public class MessageDAO implements IMessageDAO {
@@ -72,4 +76,30 @@ public class MessageDAO implements IMessageDAO {
         }
         return null;
     }
+
+    @Override
+    public List<Message> selectAllMessages() {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Message> messages = new ArrayList<>();
+        try {
+            ps = connection
+                    .prepareStatement("select * from message");
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                messages.add(new Message(
+                        rs.getInt("message_id"),
+                        rs.getInt("posted_by"),
+                        rs.getString("message_text"),
+                        rs.getLong("time_posted_epoch")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeQuietly(rs, ps);
+        }
+        return messages;
+    }
+
 }

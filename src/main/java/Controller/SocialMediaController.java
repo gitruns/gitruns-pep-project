@@ -30,6 +30,7 @@ public class SocialMediaController {
         app.post("register", this::register);
         app.post("login", this::login);
         app.post("messages", this::messages);
+        app.get("messages", this::messages);
 
         return app;
     }
@@ -87,5 +88,9 @@ public class SocialMediaController {
         } else {
             ctx.status(400);
         }
+    }
+
+    private void getMessages(Context ctx) {
+        ctx.json(msgService.selectAllMessages());
     }
 }
