@@ -62,6 +62,10 @@ public class MessageService implements IMessageService {
 
     @Override
     public Message patchMessageByID(int id, Message message) {
+        int msgLength = message.getMessage_text().length();
+        if (msgLength < 1 || msgLength > 255)
+            return null;
+
         if (dao.patchMessageByID(id, message))
             return dao.selectMessageByID(id);
         return null;
